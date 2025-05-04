@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
+#include <unistd.h>
 
 void repl();
 
@@ -20,8 +21,11 @@ int main() {
 }
 
 void repl() {
+    char cwd[256];
+
     while (1) {
-        printf("$ ");
+        getcwd(cwd, sizeof(cwd));
+        printf("%s c-shell$ ", cwd);
         char input[256];
 
         fgets(input, 256, stdin);
