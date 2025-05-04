@@ -31,6 +31,9 @@ void repl() {
         fgets(input, 256, stdin);
         input[strcspn(input, "\n")] = 0;
 
+        struct ParsedInput p = parse(input, sizeof(input));
+        printf("%s %s %s\n", p.command, p.flag, p.argument);
+
         if (strncmp("cat", input, strlen("cat")) == 0) {
             cat("../main.c");
         }

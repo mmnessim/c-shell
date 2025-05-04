@@ -1,5 +1,6 @@
 #include "utils.h"
-#include <dirent.h>
+#include <stdio.h>
+#include <string.h>
 
 int cat(char *filename) {
     FILE *fp;
@@ -63,5 +64,50 @@ int ls(char* path) {
     FindClose(hFind);
     return dwError;
 }
-
 #endif
+
+struct ParsedInput parse(char* raw_input, size_t len) {
+    struct ParsedInput p;
+    char* saveptr;
+    char* tok = strtok_r(raw_input, " ", &saveptr);
+
+    // Empty input, return empty struct
+    if (tok == NULL) {
+        p.argument = ""; // empty strings to avoid segfault
+        p.command = "";
+        p.flag = "";
+        return p;
+    }
+
+    // First word is always command
+    p.command = tok;
+    tok = strtok_r(NULL, " ", &saveptr);
+
+    // Return early if only command is given
+    if (tok == NULL) {
+        p.argument = "";
+        p.flag = "";
+        return p;
+    }
+
+    // If second word begins with "-" parse it as a flag
+    // Otherwise parse it as argument and return early
+    if (strncmp("-", tok, 1) == 0) {
+        p.flag = tok;
+    } else {
+        p.argument = tok;
+        p.flag = "";
+        return p;
+    }
+
+    tok = strtok_r(NULL, " ", &saveptr);
+
+    if (tok == NULL) {
+        p.argument = "";
+        return p;
+    }
+
+    // Will only be reached if three words are passed
+    p.argument = tok;
+    return p;
+}

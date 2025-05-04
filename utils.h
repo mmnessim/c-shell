@@ -5,6 +5,12 @@
 
 #define MAX_LINE_LEN 256
 
+struct ParsedInput {
+    char* command;
+    char* flag;
+    char* argument;
+};
+struct ParsedInput parse(char* raw_input, size_t len);
 int cat(char* filename);
 int ls(char* path);
 
