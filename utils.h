@@ -2,6 +2,9 @@
 #define _CSHELL_UTILS_H
 
 #include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+
 
 #define MAX_LINE_LEN 256
 
@@ -12,8 +15,9 @@ struct ParsedInput {
 };
 struct ParsedInput parse(char* raw_input, size_t len);
 void help();
-int cat(char* filename);
+int cat(struct ParsedInput p);
 int ls(char* path);
+int cd(struct ParsedInput p);
 
 #ifdef __unix__
 #include <dirent.h>

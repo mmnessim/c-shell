@@ -1,6 +1,6 @@
 #include "utils.h"
 #include <stdio.h>
-#include <string.h>
+
 
 void help() {
     printf("  useage <command> <optional flags> <arguments>\n");
@@ -11,17 +11,25 @@ void help() {
     printf("  help: display this help menu\n");
 }
 
-int cat(char *filename) {
+int cat(struct ParsedInput p) {
     FILE *fp;
-    fp = fopen(filename, "r");
+    fp = fopen(p.argument, "r");
     if (fp == NULL) {
         perror("Could not open file");
         return 1;
     }
-
     char line[MAX_LINE_LEN];
-    while (fgets(line, MAX_LINE_LEN, fp) != NULL) {
-        printf("%s", line);
+
+    if (strcmp(p.flag, "-n") == 0) {
+        int line_no = 1;
+        while (fgets(line, MAX_LINE_LEN, fp) != NULL) {
+            printf("%d: %s", line_no, line);
+            line_no ++;
+        }
+    } else {
+        while (fgets(line, MAX_LINE_LEN, fp) != NULL) {
+            printf("%s", line);
+        }
     }
 
     fclose(fp);
@@ -32,7 +40,11 @@ int cat(char *filename) {
 int ls(char* path) {
     DIR *d;
     struct dirent *dir;
-    d = opendir(path);
+    if (strcmp(path, "") == 0) {
+        d = opendir(".");
+    } else {
+        d = opendir(path);
+    }
 
     if (d == NULL) {
         perror("Could not open directory");
@@ -40,7 +52,7 @@ int ls(char* path) {
     }
 
     while ((dir = readdir(d)) != NULL) {
-        printf("%s\n", dir->d_name);
+        printf("  %s\n", dir->d_name);
     }
 
     closedir(d);
@@ -49,7 +61,9 @@ int ls(char* path) {
 
 #elif _WIN32 || _WIN64
 int ls(char* path) {
-    printf("Windows\n");
+    if (strcmp(path, "") == 0) {
+        path = ".";
+    }
     WIN32_FIND_DATA ffd;
     LARGE_INTEGER filesize;
     char szDir[MAX_PATH];
@@ -74,6 +88,15 @@ int ls(char* path) {
     return dwError;
 }
 #endif
+
+int cd(struct ParsedInput p) {
+    char *path = p.argument;
+    if (chdir(path) != 0) {
+        perror("failed to change directory");
+        return 1;
+    }
+    return 0;
+}
 
 struct ParsedInput parse(char* raw_input, size_t len) {
     struct ParsedInput p;

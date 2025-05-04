@@ -29,9 +29,13 @@ void repl() {
         } else if (strcmp(p.command, "help") == 0) {
             help();
         } else if (strcmp(p.command, "cat") == 0) {
-            cat(p.argument);
+            cat(p);
         } else if (strcmp(p.command, "ls") == 0) {
             ls(p.argument);
+        } else if (strcmp(p.command, "cd") == 0) {
+            cd(p);
+        } else if (strcmp(p.command, "exit") == 0) {
+            return;
         }
     }
 }
