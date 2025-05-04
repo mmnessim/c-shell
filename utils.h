@@ -11,6 +11,7 @@ struct ParsedInput {
     char* argument;
 };
 struct ParsedInput parse(char* raw_input, size_t len);
+void help();
 int cat(char* filename);
 int ls(char* path);
 

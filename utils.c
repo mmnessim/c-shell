@@ -2,6 +2,15 @@
 #include <stdio.h>
 #include <string.h>
 
+void help() {
+    printf("  useage <command> <optional flags> <arguments>\n");
+    printf("  cat: display file contents\n");
+    printf("    -n TODO display number lines\n");
+    printf("  ls: display contents of a directory\n");
+    printf("    -a TODO display hidden files and folders\n");
+    printf("  help: display this help menu\n");
+}
+
 int cat(char *filename) {
     FILE *fp;
     fp = fopen(filename, "r");
