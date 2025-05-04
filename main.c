@@ -29,7 +29,7 @@ void repl() {
         char input[256];
 
         fgets(input, 256, stdin);
-        input[strcspn(input, "\n")] = 0;
+        //input[strcspn(input, "\n")] = 0;
 
         struct ParsedInput p = parse(input, sizeof(input));
         printf("%s %s %s\n", p.command, p.flag, p.argument);

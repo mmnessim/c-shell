@@ -68,12 +68,20 @@ int ls(char* path) {
 
 struct ParsedInput parse(char* raw_input, size_t len) {
     struct ParsedInput p;
+
+    if (raw_input[0] == ' ') {
+        p.argument = ""; // empty strings to avoid segfault
+        p.command = "";
+        p.flag = "";
+        return p;
+    }
+
     char* saveptr;
     char* tok = strtok_r(raw_input, " ", &saveptr);
 
     // Empty input, return empty struct
     if (tok == NULL) {
-        p.argument = ""; // empty strings to avoid segfault
+        p.argument = "";
         p.command = "";
         p.flag = "";
         return p;
@@ -94,6 +102,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
     // Otherwise parse it as argument and return early
     if (strncmp("-", tok, 1) == 0) {
         p.flag = tok;
+        p.argument = "";
     } else {
         p.argument = tok;
         p.flag = "";
