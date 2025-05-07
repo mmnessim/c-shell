@@ -8,7 +8,10 @@ void help() {
     printf("    -n TODO display number lines\n");
     printf("  ls: display contents of a directory\n");
     printf("    -a TODO display hidden files and folders\n");
-    printf("  help: display this help menu\n");
+    printf("  touch: create a file\n");
+    printf("  rm: remove a file\n");
+    printf("  help: display this help menu\n\n");
+    printf("Written by Mounir Nessim\nmmnessim@gmail.com\nhttps://github.com/mmnessim/c-shell\n");
 }
 
 // Simple implementation of cat builtin
