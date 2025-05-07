@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include "utils.h"
-#include <unistd.h>
 
 void repl();
 
@@ -22,7 +21,6 @@ void repl() {
         input[strcspn(input, "\n")] = 0;
 
         struct ParsedInput p = parse(input, sizeof(input));
-        printf("Command: %s Flag: %s Argument:%s\n", p.command, p.flag, p.argument);
 
         if (strcmp(p.command, "") == 0) {
             continue;
@@ -34,6 +32,10 @@ void repl() {
             ls(p.argument);
         } else if (strcmp(p.command, "cd") == 0) {
             cd(p);
+        } else if (strcmp(p.command, "touch") == 0) {
+            touch(p);
+        } else if (strcmp(p.command, "rm") == 0) {
+            rm(p);
         } else if (strcmp(p.command, "exit") == 0) {
             return;
         }

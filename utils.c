@@ -1,7 +1,7 @@
 #include "utils.h"
 #include <stdio.h>
 
-
+// Display help menu
 void help() {
     printf("  useage <command> <optional flags> <arguments>\n");
     printf("  cat: display file contents\n");
@@ -11,6 +11,10 @@ void help() {
     printf("  help: display this help menu\n");
 }
 
+// Simple implementation of cat builtin
+// Displays file contents or error
+// -n flag adds line numbers
+// Returns 0 for success and 1 for error
 int cat(struct ParsedInput p) {
     FILE *fp;
     fp = fopen(p.argument, "r");
@@ -88,6 +92,31 @@ int ls(char* path) {
     return dwError;
 }
 #endif
+
+// Simple implementation of touch builtin
+int touch(struct ParsedInput p) {
+    FILE *fp;
+    fp = fopen(p.argument, "w");
+
+    if (fp == NULL) {
+        perror("Could not create file");
+        return 1;
+    }
+
+    fclose(fp);
+
+    return 0;
+}
+
+int rm(struct ParsedInput p) {
+    int res = remove(p.argument);
+
+    if (res != 0) {
+        perror("Could not delete file");
+        return 1;
+    }
+    return 0;
+}
 
 int cd(struct ParsedInput p) {
     char *path = p.argument;

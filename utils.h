@@ -18,6 +18,8 @@ void help();
 int cat(struct ParsedInput p);
 int ls(char* path);
 int cd(struct ParsedInput p);
+int touch(struct ParsedInput p);
+int rm(struct ParsedInput p);
 
 #ifdef __unix__
 #include <dirent.h>
