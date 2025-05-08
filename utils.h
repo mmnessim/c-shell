@@ -1,6 +1,7 @@
 #ifndef _CSHELL_UTILS_H
 #define _CSHELL_UTILS_H
 
+#include <stddef.h>
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
@@ -12,6 +13,8 @@ struct ParsedInput {
     char* command;
     char* flag;
     char* argument;
+    int redirect;
+    char* second_arg;
 };
 struct ParsedInput parse(char* raw_input, size_t len);
 void help();

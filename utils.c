@@ -1,5 +1,7 @@
 #include "utils.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 // Display help menu
 void help() {
@@ -132,55 +134,78 @@ int cd(struct ParsedInput p) {
 
 struct ParsedInput parse(char* raw_input, size_t len) {
     struct ParsedInput p;
+    p.argument = "";
+    p.command = "";
+    p.flag = "";
+    p.redirect = 0;
+    p.second_arg = "";
 
     if (raw_input[0] == ' ') {
-        p.argument = ""; // empty strings to avoid segfault
-        p.command = "";
-        p.flag = "";
         return p;
     }
 
+    //// FIRST WORD
     char* saveptr;
     char* tok = strtok_r(raw_input, " ", &saveptr);
 
     // Empty input, return empty struct
     if (tok == NULL) {
-        p.argument = "";
-        p.command = "";
-        p.flag = "";
         return p;
     }
 
     // First word is always command
+    //// DEBUG
+    //printf("tok1: %s\n", tok);
     p.command = tok;
-    tok = strtok_r(NULL, " ", &saveptr);
 
-    // Return early if only command is given
+    //// SECOND WORD
+    tok = strtok_r(NULL, " ", &saveptr);
     if (tok == NULL) {
-        p.argument = "";
-        p.flag = "";
         return p;
     }
+    //// DEBUG
+    //printf("tok2: %s\n", tok);
 
     // If second word begins with "-" parse it as a flag
     // Otherwise parse it as argument and return early
     if (strncmp("-", tok, 1) == 0) {
         p.flag = tok;
-        p.argument = "";
+
+        //// THIRD WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok3: %s\n", tok);
+
+        p.argument = tok;
+        return p;
+
     } else {
         p.argument = tok;
-        p.flag = "";
-        return p;
+
+        //// THIRD WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok3: %s\n", tok);
+
+        if (strcmp(tok, ">>") == 0) {
+            p.redirect = 1;
+        }
+
+        //// FOURTH WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok4: %s\n", tok);
+        p.second_arg = tok;
     }
 
-    tok = strtok_r(NULL, " ", &saveptr);
-
-    if (tok == NULL) {
-        p.argument = "";
-        return p;
-    }
-
-    // Will only be reached if three words are passed
-    p.argument = tok;
     return p;
 }
