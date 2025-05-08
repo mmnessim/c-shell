@@ -29,6 +29,30 @@ int cat(struct ParsedInput p) {
     }
     char line[MAX_LINE_LEN];
 
+    if (p.redirect == 1) {
+        FILE *newfile;
+        newfile = fopen(p.second_arg, "w");
+
+        if (newfile == NULL) {
+            perror("Could not write to file");
+            return 1;
+        }
+
+        if (strcmp(p.flag, "-n") == 0) {
+            int line_no = 1;
+            while (fgets(line, MAX_LINE_LEN, fp) != NULL) {
+                fprintf(newfile, "%d: %s", line_no, line);
+                line_no ++;
+            }
+        } else {
+            while (fgets(line, MAX_LINE_LEN, fp) != NULL) {
+                fprintf(newfile, "%s", line);
+            }
+        }
+
+        fclose(newfile);
+    }
+
     if (strcmp(p.flag, "-n") == 0) {
         int line_no = 1;
         while (fgets(line, MAX_LINE_LEN, fp) != NULL) {
