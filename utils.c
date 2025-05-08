@@ -169,6 +169,9 @@ struct ParsedInput parse(char* raw_input, size_t len) {
     // If second word begins with "-" parse it as a flag
     // Otherwise parse it as argument and return early
     if (strncmp("-", tok, 1) == 0) {
+        ////////////////////////////////////
+        //// TODO
+        //// handle flag and redirect operator
         p.flag = tok;
 
         //// THIRD WORD
