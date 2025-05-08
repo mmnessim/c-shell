@@ -95,4 +95,14 @@ void test_parse_redirection() {
     assert(p.redirect == 1);
     assert(strcmp(p.second_arg, "file.txt") == 0);
     printf("  Redirect and second_arg passed\n");
+
+    char input2[] = "cat -n main.c >> file.txt";
+    struct ParsedInput p2 = parse(input2, strlen(input2));
+    assert(strcmp(p2.command, "cat") == 0);
+    assert(strcmp(p2.flag, "-n") == 0);
+    assert(strcmp(p2.argument, "main.c") == 0);
+    assert(p2.redirect == 1);
+    assert(strcmp(p2.second_arg, "file.txt") == 0);
+    printf("  Redirect, flag, and second_arg passed\n");
+
 }
