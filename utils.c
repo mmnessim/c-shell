@@ -88,7 +88,6 @@ int ls(struct ParsedInput p) {
 
         FILE *newfile;
         newfile = fopen(p.second_arg, "w");
-        printf("Redirect == 1\n");
 
         if (newfile == NULL) {
             perror("Could not write to file");
@@ -102,6 +101,10 @@ int ls(struct ParsedInput p) {
         fclose(newfile);
     } else {
         while ((dir = readdir(d)) != NULL) {
+            if (strncmp(dir->d_name, ".", 1) == 0 &&
+                    !(strstr(p.flag, "a") != NULL)) {
+                continue;
+            }
             printf("%s\n", dir->d_name);
         }
     }
