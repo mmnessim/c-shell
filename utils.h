@@ -19,7 +19,7 @@ struct ParsedInput {
 struct ParsedInput parse(char* raw_input, size_t len);
 void help();
 int cat(struct ParsedInput p);
-int ls(char* path);
+int ls(struct ParsedInput p);
 int cd(struct ParsedInput p);
 int touch(struct ParsedInput p);
 int rm(struct ParsedInput p);

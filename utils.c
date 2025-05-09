@@ -70,13 +70,13 @@ int cat(struct ParsedInput p) {
 }
 
 #ifdef __unix__
-int ls(char* path) {
+int ls(struct ParsedInput p) {
     DIR *d;
     struct dirent *dir;
-    if (strcmp(path, "") == 0) {
+    if (strcmp(p.argument, "") == 0) {
         d = opendir(".");
     } else {
-        d = opendir(path);
+        d = opendir(p.argument);
     }
 
     if (d == NULL) {
@@ -84,8 +84,26 @@ int ls(char* path) {
         return 1;
     }
 
-    while ((dir = readdir(d)) != NULL) {
-        printf("  %s\n", dir->d_name);
+    if (p.redirect == 1) {
+
+        FILE *newfile;
+        newfile = fopen(p.second_arg, "w");
+        printf("Redirect == 1\n");
+
+        if (newfile == NULL) {
+            perror("Could not write to file");
+            return 1;
+        };
+
+        while ((dir = readdir(d)) != NULL) {
+            fprintf(newfile, "  %s\n", dir->d_name);
+        }
+
+        fclose(newfile);
+    } else {
+        while ((dir = readdir(d)) != NULL) {
+            printf("%s\n", dir->d_name);
+        }
     }
 
     closedir(d);

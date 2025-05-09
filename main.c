@@ -29,7 +29,7 @@ void repl() {
         } else if (strcmp(p.command, "cat") == 0) {
             cat(p);
         } else if (strcmp(p.command, "ls") == 0) {
-            ls(p.argument);
+            ls(p);
         } else if (strcmp(p.command, "cd") == 0) {
             cd(p);
         } else if (strcmp(p.command, "touch") == 0) {
