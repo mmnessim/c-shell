@@ -111,9 +111,9 @@ int ls(struct ParsedInput p) {
 }
 
 #elif _WIN32 || _WIN64
-int ls(char* path) {
-    if (strcmp(path, "") == 0) {
-        path = ".";
+int ls(struct ParsedInput p) {
+    if (strcmp(p.argument, "") == 0) {
+        p.argument = ".";
     }
     WIN32_FIND_DATA ffd;
     LARGE_INTEGER filesize;
@@ -122,7 +122,7 @@ int ls(char* path) {
     HANDLE hFind = INVALID_HANDLE_VALUE;
     DWORD dwError = 0;
 
-    StringCchCopy(szDir, MAX_PATH, path);
+    StringCchCopy(szDir, MAX_PATH, p.argument);
     StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
 
     hFind = FindFirstFile(szDir, &ffd);
