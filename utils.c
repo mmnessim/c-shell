@@ -177,6 +177,25 @@ int cd(struct ParsedInput p) {
     return 0;
 }
 
+int echo(struct ParsedInput p) {
+    printf("%s\n", p.argument);
+
+    if (p.redirect == 1) {
+        FILE *newfile;
+        newfile = fopen(p.second_arg, "w");
+        if (newfile == NULL) {
+            perror("Could not write file");
+            return 1;
+        }
+
+        fprintf(newfile, "%s", p.argument);
+
+        fclose(newfile);
+    }
+
+    return 0;
+}
+
 struct ParsedInput parse(char* raw_input, size_t len) {
     struct ParsedInput p;
     p.argument = "";
@@ -224,7 +243,21 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         //// DEBUG
         //printf("tok3: %s\n", tok);
 
-        p.argument = tok;
+        if (strncmp(tok, "\"", 1) == 0) {
+            //// Capture input in quotes in third position
+            char *string = (char *)malloc(100 * sizeof(char));
+            strcpy(string, tok);
+            memmove(string, string+1, strlen(string)); // Remove initial "
+            strcat(string, " "); // Append space
+            tok = strtok_r(NULL, "\"", &saveptr);
+            if (tok == NULL) {
+                return p;
+            }
+            strcat(string, tok);
+            p.argument = string;
+        } else {
+            p.argument = tok;
+        }
 
         //// FOURTH WORD
         tok = strtok_r(NULL, " ", &saveptr);
@@ -245,6 +278,41 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         p.second_arg = tok;
 
         return p;
+
+    } else if (strncmp(tok, "\"", 1) == 0) {
+        //// Capture input in quotes in second position
+
+        // Does this need to be freed at some point?
+        char *string = (char *)malloc(100 * sizeof(char));
+        strcpy(string, tok);
+        memmove(string, string+1, strlen(string)); // Remove initial "
+        strcat(string, " "); // Append space
+        tok = strtok_r(NULL, "\"", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        strcat(string, tok);
+        p.argument = string;
+
+        //// Continue parsing
+        //// THIRD WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+
+        if (strcmp(tok, ">>") == 0) {
+            p.redirect = 1;
+        }
+
+        //// FOURTH WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok4: %s\n", tok);
+        p.second_arg = tok;
 
     } else {
         p.argument = tok;

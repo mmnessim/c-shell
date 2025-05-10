@@ -5,10 +5,12 @@
 
 void test_parse();
 void test_parse_redirection();
+void test_parse_with_quote();
 
 int main() {
     test_parse();
     test_parse_redirection();
+    test_parse_with_quote();
 }
 
 void test_parse() {
@@ -105,4 +107,20 @@ void test_parse_redirection() {
     assert(strcmp(p2.second_arg, "file.txt") == 0);
     printf("  Redirect, flag, and second_arg passed\n");
 
+}
+
+void test_parse_with_quote() {
+    //// TODO
+    // Add test cases for quote wrapped text with flags
+
+    printf("test_parse_with_quote()\n");
+
+    char input[] = "echo \"This is a test\"";
+    struct ParsedInput p = parse(input, strlen(input));
+    printf("%s\n", p.argument);
+
+    assert(strcmp(p.command, "echo") == 0);
+    assert(strcmp(p.argument, "This is a test") == 0);
+
+    printf("  Quotes around argument passed\n");
 }

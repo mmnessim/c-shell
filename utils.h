@@ -23,6 +23,7 @@ int ls(struct ParsedInput p);
 int cd(struct ParsedInput p);
 int touch(struct ParsedInput p);
 int rm(struct ParsedInput p);
+int echo(struct ParsedInput p);
 
 #ifdef __unix__
 #include <dirent.h>

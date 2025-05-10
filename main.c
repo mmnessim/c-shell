@@ -36,6 +36,8 @@ void repl() {
             touch(p);
         } else if (strcmp(p.command, "rm") == 0) {
             rm(p);
+        } else if (strcmp(p.command, "echo") == 0) {
+            echo(p);
         } else if (strcmp(p.command, "exit") == 0) {
             return;
         }
