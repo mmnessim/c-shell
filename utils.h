@@ -28,7 +28,7 @@ int echo(struct ParsedInput p);
 #ifdef __unix__
 #include <dirent.h>
 
-#elif _WIN32
+#elif _WIN32 | _WIN64
 #include <windows.h>
 #include <strsafe.h>
 

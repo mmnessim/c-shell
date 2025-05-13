@@ -196,6 +196,7 @@ int echo(struct ParsedInput p) {
     return 0;
 }
 
+#ifdef __unix__
 struct ParsedInput parse(char* raw_input, size_t len) {
     struct ParsedInput p;
     p.argument = "";
@@ -341,3 +342,150 @@ struct ParsedInput parse(char* raw_input, size_t len) {
 
     return p;
 }
+#elif _WIN32 | _WIN64
+struct ParsedInput parse(char* raw_input, size_t len) {
+    struct ParsedInput p;
+    p.argument = "";
+    p.command = "";
+    p.flag = "";
+    p.redirect = 0;
+    p.second_arg = "";
+
+    if (raw_input[0] == ' ') {
+        return p;
+    }
+
+    //// FIRST WORD
+    char* saveptr;
+    char* tok = strtok_r(raw_input, " ", &saveptr);
+
+    // Empty input, return empty struct
+    if (tok == NULL) {
+        return p;
+    }
+
+    // First word is always command
+    //// DEBUG
+    //printf("tok1: %s\n", tok);
+    p.command = tok;
+
+    //// SECOND WORD
+    tok = strtok_r(NULL, " ", &saveptr);
+    if (tok == NULL) {
+        return p;
+    }
+    //// DEBUG
+    //printf("tok2: %s\n", tok);
+
+    // If second word begins with "-" parse it as a flag
+    // Otherwise parse it as argument and return early
+    if (strncmp("-", tok, 1) == 0) {
+        p.flag = tok;
+
+        //// THIRD WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok3: %s\n", tok);
+
+        if (strncmp(tok, "\"", 1) == 0) {
+            //// Capture input in quotes in third position
+            char *string = (char *)malloc(100 * sizeof(char));
+            strcpy(string, tok);
+            memmove(string, string+1, strlen(string)); // Remove initial "
+            strcat(string, " "); // Append space
+            tok = strtok_r(NULL, "\"", &saveptr);
+            if (tok == NULL) {
+                return p;
+            }
+            strcat(string, tok);
+            p.argument = string;
+        } else {
+            p.argument = tok;
+        }
+
+        //// FOURTH WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+
+        if (strcmp(tok, ">>") == 0) {
+            p.redirect = 1;
+        }
+
+        //// FIFTH WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+
+        p.second_arg = tok;
+
+        return p;
+
+    } else if (strncmp(tok, "\"", 1) == 0) {
+        //// Capture input in quotes in second position
+
+        // Does this need to be freed at some point?
+        char *string = (char *)malloc(100 * sizeof(char));
+        strcpy(string, tok);
+        memmove(string, string+1, strlen(string)); // Remove initial "
+        strcat(string, " "); // Append space
+        tok = strtok_r(NULL, "\"", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        strcat(string, tok);
+        p.argument = string;
+
+        //// Continue parsing
+        //// THIRD WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+
+        if (strcmp(tok, ">>") == 0) {
+            p.redirect = 1;
+        }
+
+        //// FOURTH WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok4: %s\n", tok);
+        p.second_arg = tok;
+
+    } else {
+        p.argument = tok;
+
+        //// THIRD WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok3: %s\n", tok);
+
+        if (strcmp(tok, ">>") == 0) {
+            p.redirect = 1;
+        }
+
+        //// FOURTH WORD
+        tok = strtok_r(NULL, " ", &saveptr);
+        if (tok == NULL) {
+            return p;
+        }
+        //// DEBUG
+        //printf("tok4: %s\n", tok);
+        p.second_arg = tok;
+    }
+
+    return p;
+}
+#endif
