@@ -357,7 +357,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
 
     //// FIRST WORD
     char* saveptr;
-    char* tok = strtok_r(raw_input, " ", &saveptr);
+    char* tok = strtok_s(raw_input, " ", &saveptr);
 
     // Empty input, return empty struct
     if (tok == NULL) {
@@ -370,7 +370,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
     p.command = tok;
 
     //// SECOND WORD
-    tok = strtok_r(NULL, " ", &saveptr);
+    tok = strtok_s(NULL, " ", &saveptr);
     if (tok == NULL) {
         return p;
     }
@@ -383,7 +383,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         p.flag = tok;
 
         //// THIRD WORD
-        tok = strtok_r(NULL, " ", &saveptr);
+        tok = strtok_s(NULL, " ", &saveptr);
         if (tok == NULL) {
             return p;
         }
@@ -393,7 +393,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         p.argument = tok;
 
         //// FOURTH WORD
-        tok = strtok_r(NULL, " ", &saveptr);
+        tok = strtok_s(NULL, " ", &saveptr);
         if (tok == NULL) {
             return p;
         }
@@ -403,7 +403,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         }
 
         //// FIFTH WORD
-        tok = strtok_r(NULL, " ", &saveptr);
+        tok = strtok_s(NULL, " ", &saveptr);
         if (tok == NULL) {
             return p;
         }
@@ -416,7 +416,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         p.argument = tok;
 
         //// THIRD WORD
-        tok = strtok_r(NULL, " ", &saveptr);
+        tok = strtok_s(NULL, " ", &saveptr);
         if (tok == NULL) {
             return p;
         }
@@ -428,7 +428,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         }
 
         //// FOURTH WORD
-        tok = strtok_r(NULL, " ", &saveptr);
+        tok = strtok_s(NULL, " ", &saveptr);
         if (tok == NULL) {
             return p;
         }
