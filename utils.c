@@ -23,6 +23,11 @@ void help() {
 int cat(struct ParsedInput p) {
     FILE *fp;
     fp = fopen(p.argument, "r");
+
+    if (p.alloc) {
+        free(p.argument);
+    }
+
     if (fp == NULL) {
         perror("Could not open file");
         return 1;
@@ -79,6 +84,10 @@ int ls(struct ParsedInput p) {
         d = opendir(p.argument);
     }
 
+    if (p.alloc) {
+        free(p.argument);
+    }
+
     if (d == NULL) {
         perror("Could not open directory");
         return 1;
@@ -128,6 +137,10 @@ int ls(struct ParsedInput p) {
     StringCchCopy(szDir, MAX_PATH, p.argument);
     StringCchCat(szDir, MAX_PATH, TEXT("\\*"));
 
+    if (p.alloc) {
+        free(p.argument);
+    }
+
     hFind = FindFirstFile(szDir, &ffd);
 
     if (INVALID_HANDLE_VALUE == hFind) {
@@ -148,6 +161,10 @@ int touch(struct ParsedInput p) {
     FILE *fp;
     fp = fopen(p.argument, "w");
 
+    if (p.alloc) {
+        free(p.argument);
+    }
+
     if (fp == NULL) {
         perror("Could not create file");
         return 1;
@@ -161,6 +178,9 @@ int touch(struct ParsedInput p) {
 int rm(struct ParsedInput p) {
     int res = remove(p.argument);
 
+    if (p.alloc) {
+        free(p.argument);
+    }
     if (res != 0) {
         perror("Could not delete file");
         return 1;
@@ -170,6 +190,9 @@ int rm(struct ParsedInput p) {
 
 int cd(struct ParsedInput p) {
     char *path = p.argument;
+    if (p.alloc) {
+        free(p.argument);
+    }
     if (chdir(path) != 0) {
         perror("failed to change directory");
         return 1;
