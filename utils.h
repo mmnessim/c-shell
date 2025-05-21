@@ -15,6 +15,7 @@ struct ParsedInput {
     char* argument;
     int redirect;
     char* second_arg;
+    int alloc;
 };
 struct ParsedInput parse(char* raw_input, size_t len);
 void help();

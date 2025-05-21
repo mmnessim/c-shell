@@ -115,9 +115,9 @@ void test_parse_with_quote() {
 
     printf("test_parse_with_quote()\n");
 
-    char input[] = "echo \"This is a test\"";
+    char input[] = "echo -n \"This is a test\"";
     struct ParsedInput p = parse(input, strlen(input));
-    printf("%s\n", p.argument);
+    printf("p.argument: %s\n", p.argument);
 
     assert(strcmp(p.command, "echo") == 0);
     assert(strcmp(p.argument, "This is a test") == 0);
