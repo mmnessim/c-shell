@@ -24,7 +24,7 @@ int cat(struct ParsedInput p) {
     FILE *fp;
     fp = fopen(p.argument, "r");
 
-    if (p.alloc == 1) {
+    if (p.alloc) {
         free(p.argument);
     }
 
