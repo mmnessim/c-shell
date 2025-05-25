@@ -24,7 +24,7 @@ int cat(struct ParsedInput p) {
     FILE *fp;
     fp = fopen(p.argument, "r");
 
-    if (p.alloc) {
+    if (p.alloc == 1) {
         free(p.argument);
     }
 
@@ -379,7 +379,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
     p.flag = "";
     p.redirect = 0;
     p.second_arg = "";
-    p.alloc = 1;
+    p.alloc = 0;
 
     if (raw_input[0] == ' ') {
         return p;
@@ -421,39 +421,28 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         //printf("tok3: %s\n", tok);
 
         // If third word begins with "
-        //// Working implementation
-        //// Not sure if/when to free q_string
         if (strncmp("\"", tok, 1) == 0) {
             // Allocate a string
             char *q_string = (char *)malloc(100 *sizeof(char));
             strcpy_s(q_string, sizeof(tok), tok);
-
-            printf("Q_STRING %s\n", q_string);
             // Move string by 1 to remove inital "
             memmove_s(q_string, 100, q_string + 1, 100);
-            printf("Q_STRING without quote %s\n", q_string);
-
             strcat_s(q_string, sizeof(q_string), " ");
-
-            printf("Q_STRING with space %s.\n", q_string);
             tok = strtok_s(NULL, "\"", &saveptr);
             if (tok == NULL) {
                 return p;
             }
-            char end_of_string[64];
-            printf("TOK %s\n", tok);
             strcat_s(q_string, 100 + sizeof(tok), tok);
-            printf("Q_STRING full? %s\n", q_string);
 
             size_t len = strlen(q_string);
             q_string[len] = '\0';
 
             p.argument = q_string;
             p.alloc = 1;
-            return p;
+            //return p;
+        } else {
+            p.argument = tok;
         }
-
-        p.argument = tok;
 
         //// FOURTH WORD
         tok = strtok_s(NULL, " ", &saveptr);
