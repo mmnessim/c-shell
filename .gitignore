@@ -2,3 +2,4 @@
 *.exe
 Makefile
 /.cache
+utils.so

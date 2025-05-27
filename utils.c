@@ -210,6 +210,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
     p.flag = "";
     p.redirect = 0;
     p.second_arg = "";
+    p.alloc = 0;
 
     if (raw_input[0] == ' ') {
         return p;
