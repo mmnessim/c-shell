@@ -30,16 +30,22 @@ class Expected:
 def compare(testname: str, p: ParsedInput, expected: Expected):
     assert p.command.decode('utf-8') == expected.command, \
         f"Command wrong. expected {expected.command} got {p.command.decode('utf-8')}"
+
     assert p.flag.decode('utf-8') == expected.flag, \
         f"Flag wrong. expected {expected.flag} got {p.flag.decode('utf-8')}"
+
     assert p.argument.decode('utf-8') == expected.argument,\
         f"Argument wrong. expected {expected.argument} got {p.argument.decode('utf-8')}"
+
     assert p.redirect == expected.redirect, \
         f"Redirect wrong. expected {expected.redirect} got {p.argument}"
+
     assert p.second_arg.decode('utf-8') == expected.second_arg, \
         f"Second Argument wrong. expected {expected.second_arg} got {p.second_arg.decode('utf-8')}"
+
     assert p.alloc == expected.alloc, \
         f"Alloc wrong. expected {expected.alloc} got {p.alloc}"
+
     print(f"   Test: {testname} passed")
 
 # Command only
