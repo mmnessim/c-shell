@@ -286,6 +286,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
             }
             strcat(string, tok);
             p.argument = string;
+            p.alloc = 1;
         } else {
             p.argument = tok;
         }
@@ -324,6 +325,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         }
         strcat(string, tok);
         p.argument = string;
+        p.alloc = 1;
 
         //// Continue parsing
         //// THIRD WORD
