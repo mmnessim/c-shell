@@ -84,3 +84,16 @@ compare("Command, quote, redirect, and second_arg", p, Expected("echo", "", "Hel
 
 p = utils.parse(b"echo -n \"Hello world\" >> new.txt")
 compare("Command, flag, quote, redirect, and second_arg", p, Expected("echo", "-n", "Hello world", 1, "new.txt", 1))
+
+# Edge cases
+p = utils.parse(b" echo")
+compare("Leading space", p, Expected("", "", "", 0, "", 0))
+
+p = utils.parse(b"echo  blorg")
+compare("Extra space", p, Expected("echo", "", "blorg", 0, "", 0))
+
+p = utils.parse(b"cat >> blorg")
+compare("Redirect in wrong place", p, Expected("cat", "", ">>", 0, "", 0))
+
+p = utils.parse(b"")
+compare("Empty input", p, Expected("", "", "", 0, "", 0))
