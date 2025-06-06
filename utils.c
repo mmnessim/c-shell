@@ -285,6 +285,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
             strcat(string, " "); // Append space
             tok = strtok_r(NULL, "\"", &saveptr);
             if (tok == NULL) {
+                free(string);
                 return p;
             }
             strcat(string, tok);
@@ -324,6 +325,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
         strcat(string, " "); // Append space
         tok = strtok_r(NULL, "\"", &saveptr);
         if (tok == NULL) {
+            free(string);
             return p;
         }
         strcat(string, tok);
@@ -436,6 +438,7 @@ struct ParsedInput parse(char* raw_input, size_t len) {
             strcat_s(q_string, sizeof(q_string), " ");
             tok = strtok_s(NULL, "\"", &saveptr);
             if (tok == NULL) {
+                free(q_string);
                 return p;
             }
             strcat_s(q_string, 100 + sizeof(tok), tok);
