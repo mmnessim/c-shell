@@ -5,7 +5,7 @@
 
 // Display help menu
 void help() {
-    printf("  useage <command> <optional flags> <arguments>\n");
+    printf("  usage <command> <optional flags> <arguments>\n");
     printf("  cat: display file contents\n");
     printf("    -n TODO display number lines\n");
     printf("  ls: display contents of a directory\n");
@@ -190,12 +190,15 @@ int rm(struct ParsedInput p) {
 
 int cd(struct ParsedInput p) {
     char *path = p.argument;
-    if (p.alloc) {
-        free(p.argument);
-    }
     if (chdir(path) != 0) {
         perror("failed to change directory");
+        if (p.alloc) {
+            free(p.argument);
+        }
         return 1;
+    }
+    if (p.alloc) {
+        free(p.argument);
     }
     return 0;
 }
