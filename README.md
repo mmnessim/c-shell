@@ -23,3 +23,5 @@ cmake --build .
 * Better comments
 * Add command history
 * Maybe add pipe operator
+* Pervasive error checking
+* Flesh out README
