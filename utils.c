@@ -7,13 +7,13 @@
 void help() {
     printf("  usage <command> <optional flags> <arguments>\n");
     printf("  cat: display file contents\n");
-    printf("    -n TODO display number lines\n");
+    printf("    -n display number lines\n");
     printf("  ls: display contents of a directory\n");
     printf("    -a TODO display hidden files and folders\n");
     printf("  touch: create a file\n");
     printf("  rm: remove a file\n");
     printf("  help: display this help menu\n\n");
-    printf("Written by Mounir Nessim\nmmnessim@gmail.com\nhttps://github.com/mmnessim/c-shell\n");
+    printf("Written by Mounir Nessim\nmmnessim@gmail.com\nhttps://github.com/mmnessim/c-shell\n\n");
 }
 
 // Simple implementation of cat builtin
